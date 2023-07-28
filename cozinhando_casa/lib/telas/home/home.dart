@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
+import '../app_bar/app_bar.dart';
+import '../detalhes/detalhes.dart';
 import '../../modelos/receita.dart';
 
 class Home extends StatefulWidget {
@@ -10,19 +12,6 @@ class Home extends StatefulWidget {
   State<StatefulWidget> createState() {
     return HomeState();
   }
-}
-
-class ApplicationToolbar extends StatelessWidget
-    implements PreferredSizeWidget {
-  const ApplicationToolbar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(title: const Text('Cozinhando em Casa'));
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class HomeState extends State<Home> {
@@ -49,28 +38,37 @@ class HomeState extends State<Home> {
               itemBuilder: (BuildContext context, int index) {
                 Receita receita = Receita.fromJson(receitas[index]);
 
-                return _construirCard(receita.titulo, receita.foto);
+                return _construirCard(receita);
               },
               itemCount: receitas.length);
         });
   }
 
-  Widget _construirCard(titulo, foto) {
-    return SizedBox(
-        height: 300,
-        child: Center(
-          child: Card(
-              margin: const EdgeInsets.all(16),
-              child: Column(children: <Widget>[
-                Stack(
-                  children: [
-                    _construirImagem(foto),
-                    _construirGradienteCard(),
-                    _construirTextoCard(titulo),
-                  ],
-                )
-              ])),
-        ));
+  Widget _construirCard(receita) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    Detalhes(key: Key(receita.titulo), receita: receita)));
+      },
+      child: SizedBox(
+          height: 300,
+          child: Center(
+            child: Card(
+                margin: const EdgeInsets.all(16),
+                child: Column(children: <Widget>[
+                  Stack(
+                    children: [
+                      _construirImagem(receita.foto),
+                      _construirGradienteCard(),
+                      _construirTextoCard(receita.titulo),
+                    ],
+                  )
+                ])),
+          )),
+    );
   }
 
   Widget _construirGradienteCard() {
