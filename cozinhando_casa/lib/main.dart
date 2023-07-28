@@ -33,6 +33,6 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           primarySwatch: Colors.deepOrange,
         ),
-        home: Home());
+        home: const Home());
   }
 }
